@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain-O-Math Olympiad 2025 - Doon Heritage School</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles - Exactly like SOF */
+        .header-top {
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            color: white;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        header {
+            background: #fff;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c5aa0;
+            text-decoration: none;
+            line-height: 1.2;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            background: #2c5aa0;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Main Content Layout */
+        .main-wrapper {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 2;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="0,100 1000,0 1000,100"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-section h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            z-index: 1;
+            position: relative;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff6b35, #e55a2b);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(45deg, #28a745, #218838);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .cta-button.secondary:hover {
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Latest Updates Section */
+        .latest-updates {
+            padding: 50px 40px;
+        }
+
+        .section-title {
+            color: #2c5aa0;
+            font-size: 32px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #2c5aa0, #1e3f73);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .update-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid #2c5aa0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .update-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(44, 90, 160, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .update-card:hover::before {
+            opacity: 1;
+        }
+
+        .update-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-left-color: #ff6b35;
+        }
+
+        .update-card h3 {
+            color: #2c5aa0;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .update-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .read-more {
+            color: #2c5aa0;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
+        /* Sidebar Widgets */
+        .sidebar-widget {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-widget:hover {
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .widget-header {
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .widget-content {
+            padding: 25px;
+        }
+
+        .exam-detail {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+            transition: all 0.3s ease;
+        }
+
+        .exam-detail:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .exam-detail strong {
+            color: #2c5aa0;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Categories Table */
+        .categories-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .categories-table th,
+        .categories-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .categories-table th {
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            color: white;
+            font-weight: bold;
+        }
+
+        .categories-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: #f8f9fa;
+            padding: 50px 40px;
+            margin: 40px 0;
+        }
+
+        .testimonial-item {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 12px;
+            border-left: 5px solid #2c5aa0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .testimonial-item blockquote {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #2c5aa0;
+            font-size: 14px;
+        }
+
+        /* Awards Section */
+        .awards-section {
+            background: linear-gradient(135deg, #ff6b35, #e55a2b);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            margin: 40px 0;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .awards-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="rgba(255,255,255,0.1)"><circle cx="50" cy="50" r="40"/></svg>');
+            opacity: 0.3;
+        }
+
+        .awards-section h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 1;
+            position: relative;
+        }
+
+        .awards-section p {
+            font-size: 16px;
+            margin: 15px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Update Zone */
+        .update-zone {
+            background: white;
+            padding: 50px 40px;
+            margin: 40px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .update-item {
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b35;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .update-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .update-item h4 {
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .update-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #ff6b35;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #e6f3ff;
+            text-decoration: none;
+            margin: 8px 0;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ff6b35;
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #4a6fa5;
+            color: #b8d4ff;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: #ff6b35;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #e55a2b;
+            transform: translateY(-3px);
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-radius: 0 0 12px 12px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .main-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero-section {
+                padding: 30px 20px;
+            }
+
+            .hero-section h1 {
+                font-size: 28px;
+            }
+
+            .hero-section p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .latest-updates {
+                padding: 30px 20px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .update-card {
+                padding: 20px;
+            }
+
+            .widget-content {
+                padding: 20px;
+            }
+
+            .testimonials {
+                padding: 30px 20px;
+            }
+
+            .awards-section {
+                padding: 30px 20px;
+            }
+
+            .update-zone {
+                padding: 30px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .categories-table {
+                font-size: 14px;
+            }
+
+            .categories-table th,
+            .categories-table td {
+                padding: 10px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .logo-image {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .hero-section h1 {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .update-card h3 {
+                font-size: 18px;
+            }
+
+            .widget-header {
+                font-size: 16px;
+                padding: 15px;
+            }
+
+            .exam-detail {
+                padding: 12px;
+            }
+
+            .testimonial-item {
+                padding: 20px;
+            }
+
+            .awards-section h3 {
+                font-size: 24px;
+            }
+
+            .update-item h4 {
+                font-size: 16px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .fade-in-left {
+            animation: fadeInLeft 0.6s ease-out;
+        }
+
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #e55a2b);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c5aa0, #1e3f73);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <div class="header-top">
+        <div class="container">
+            REGISTRATIONS OPEN FOR BRAIN-O-MATH OLYMPIAD 2025. PLEASE CLICK HERE FOR MORE DETAILS.
+        </div>
+    </div>
+
+    <header>
+        <nav class="container">
+            <div class="logo-container">
+                <img src="logo.jpg" alt="Brain-O-Math Logo" class="logo-image">
+                <a href="#" class="logo-text">Brain-O-Math<br>Olympiad 2025</a>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#details">Exam Details</a></li>
+                <li><a href="#awards">Awards</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="admin.html" class="cta-button">Only Admin Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-wrapper">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Hero Section -->
+                <section class="hero-section" id="home">
+                    <h1>Interschool Brain-O-Math Olympiad 2025</h1>
+                    <p>Organized by Doon Heritage School, Siliguri - Developing interest in Mathematics and Science among young minds through innovation and excellence</p>
+                    <div class="hero-buttons">
+                        <a href="apply.html" class="cta-button">Apply Now</a>
+                        <a href="#details" class="cta-button secondary">View Details</a>
+                    </div>
+                </section>
+
+                <!-- Latest Updates -->
+                <section class="latest-updates" id="about">
+                    <h2 class="section-title">Latest Updates</h2>
+                    
+                    <div class="updates-grid">
+                        <div class="update-card fade-in-up">
+                            <h3> ONLINE REGISTRATION FOR SCHOOLS</h3>
+                            <p>Online Registration for Schools Only - 2025-26. Registration for Brain-O-Math Olympiad 2025 is now open. Don't miss this opportunity to showcase your mathematical and scientific abilities.</p>
+                            
+                        </div>
+
+                        <div class="update-card fade-in-up">
+                            <h3>EXAM DATE</h3>
+                            <p>Brain-O-Math Olympiad 2025 Schedule. Brain-O-Math Olympiad 2025 scheduled for Sunday, 3rd August 2025. Reporting time: 9:00 AM at Doon Heritage School, Siliguri.</p>
+                            
+                        </div>
+
+                        <div class="update-card fade-in-up">
+                            <h3> REGISTRATION FEE</h3>
+                            <p>School Registration Fee for Students. Single Subject: ₹70 | Both Subjects: ₹140.</p>
+                            
+                        </div>
+
+                        
+
+                        <div class="update-card fade-in-up">
+                            <h3>PATTERN OF QUESTIONS AND MARKING SCHEME</h3>
+                            <p>Logical Reasoning, Achievers Section, Topic Specific. Offline OMR-based exam with 50 MCQs per subject. Total marks: 60 per subject. Duration: 1 hour per subject. No negative marking.</p>
+                            
+                        </div>
+                        
+                        <!-- Add this below the "PATTERN OF QUESTIONS AND MARKING SCHEME" card -->
+                        <!-- Mathematics Section Breakdown -->
+                        <!-- Mathematics Section Breakdown -->
+                        
+                        <div class="update-card fade-in-up">
+                            <h3>RESULTS</h3>
+                            <p>Brain-O-Math Exam Results for session 2025-26. Result Declaration: 25th August 2025.ALL AWERDS AND SERTIFICATE WILL BE DELIVERED TO THE RESPECTIVE SCHOOLS  BY 31st AUGUST 2025.  </p>
+                            
+                        </div>
+
+                        
+                    </div>
+                    <!-- MATHEMATICS SECTION BREAKDOWN -->
+                    <div style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 5px solid #2c5aa0;">
+                        <h3 style="color: #2c5aa0; font-size: 18px; margin-bottom: 15px;">MATHEMATICS SECTION BREAKDOWN</h3>
+                        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                            <div style="min-width: 600px; white-space: nowrap;">
+                                <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px;">
+                                    <thead>
+                                        <tr style="background-color: #2c5aa0; color: white;">
+                                            <th style="padding: 10px; text-align: left;">Section</th>
+                                            <th style="padding: 10px;">No. of Questions</th>
+                                            <th style="padding: 10px;">Marks per Question</th>
+                                            <th style="padding: 10px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td style="padding: 10px;">Logical Reasoning</td><td style="padding: 10px;">15</td><td style="padding: 10px;">1</td><td style="padding: 10px;">15</td></tr>
+                                        <tr><td style="padding: 10px;">Mathematical Reasoning / Applied Mathematics</td><td style="padding: 10px;">20</td><td style="padding: 10px;">1</td><td style="padding: 10px;">20</td></tr>
+                                        <tr><td style="padding: 10px;">Everyday Mathematics</td><td style="padding: 10px;">10</td><td style="padding: 10px;">1</td><td style="padding: 10px;">10</td></tr>
+                                        <tr><td style="padding: 10px;">Achievers Section</td><td style="padding: 10px;">5</td><td style="padding: 10px;">3</td><td style="padding: 10px;">15</td></tr>
+                                        <tr style="font-weight: bold; background-color: #e6f2ff;">
+                                            <td style="padding: 10px;">Total</td><td style="padding: 10px;">50</td><td style="padding: 10px;">-</td><td style="padding: 10px;">60</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCIENCE SECTION BREAKDOWN -->
+                    <div style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 5px solid #e55a2b;">
+                        <h3 style="color: #e55a2b; font-size: 18px; margin-bottom: 15px;">SCIENCE SECTION BREAKDOWN</h3>
+                        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                            <div style="min-width: 600px; white-space: nowrap;">
+                                <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 14px;">
+                                    <thead>
+                                        <tr style="background-color: #e55a2b; color: white;">
+                                            <th style="padding: 10px; text-align: left;">Section</th>
+                                            <th style="padding: 10px;">No. of Questions</th>
+                                            <th style="padding: 10px;">Marks per Question</th>
+                                            <th style="padding: 10px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td style="padding: 10px;">Logical Reasoning</td><td style="padding: 10px;">15</td><td style="padding: 10px;">1</td><td style="padding: 10px;">15</td></tr>
+                                        <tr><td style="padding: 10px;">Science (Physics, Chemistry, Biology)</td><td style="padding: 10px;">20</td><td style="padding: 10px;">1</td><td style="padding: 10px;">20</td></tr>
+                                        <tr><td style="padding: 10px;">Everyday Science</td><td style="padding: 10px;">10</td><td style="padding: 10px;">1</td><td style="padding: 10px;">10</td></tr>
+                                        <tr><td style="padding: 10px;">Achievers Section</td><td style="padding: 10px;">5</td><td style="padding: 10px;">3</td><td style="padding: 10px;">15</td></tr>
+                                        <tr style="font-weight: bold; background-color: #ffeede;">
+                                            <td style="padding: 10px;">Total</td><td style="padding: 10px;">50</td><td style="padding: 10px;">-</td><td style="padding: 10px;">60</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+               
+                    
+                <!-- Awards Section -->
+                <section class="awards-section" id="awards">
+                    <h3>🏆 Awards & Recognition</h3>
+                    <p><strong> Highest Scorer:</strong> 99.99% Pure Silver Medal</p>
+                    <p><strong> Top 3 Students:</strong> Medals of Distinction & Certificates of Excellence</p>
+                    <p><strong> All Participants:</strong> E-Certificates</p>
+                    <p><strong> Special Recognition:</strong> Selected students invited to higher-level competitions</p>
+                </section>
+
+                
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Exam Details Widget -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Exam Details</div>
+                    <div class="widget-content" id="details">
+                        <div class="exam-detail">
+                            <strong>Exam Date:</strong> Sunday, 3rd August 2025
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Reporting Time:</strong> 9:00 AM
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Registration Deadline:</strong> 20th July 2025
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Admit Card Distribution:</strong> 28th July 2025
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Result Declaration:</strong> 25th August 2025
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Venue:</strong> Doon Heritage School, Siliguri
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Medium:</strong> English
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Exam Schedule:</strong><br>
+                            10:00 AM - 11:00 AM: Mathematics<br>
+                            11:00 AM - 11:30 AM: Break<br>
+                            11:30 AM - 12:30 PM: Science
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Widget -->
+                <!-- Categories & Eligibility -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Categories & Eligibility</div>
+                    <div class="widget-content">
+                        <table class="categories-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Eligible Classes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>A</td>
+                                    <td>Classes 3 & 4</td>
+                                </tr>
+                                <tr>
+                                    <td>B</td>
+                                    <td>Classes 5 & 6</td>
+                                </tr>
+                                <tr>
+                                    <td>C</td>
+                                    <td>Classes 7 & 8</td>
+                                </tr>
+                                <tr>
+                                    <td>D</td>
+                                    <td>Classes 9 & 10</td>
+                                </tr>
+                                <tr>
+                                    <td>E</td>
+                                    <td>Classes 11 & 12</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Syllabus Overview -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Syllabus Overview</div>
+                    <div class="widget-content">
+                        <p>Questions will be based on the syllabus of the junior class in each category (up to the first half of the academic year), ensuring fairness for all participants.</p>
+                        <p>For example, in Category D (Classes 9 & 10), questions will be based on the Class 9 syllabus only.</p>
+                        <p>In addition to academic topics, the paper will include:</p>
+                        <ul>
+                            <li>Logical Reasoning</li>
+                            <li>Mathematical Thinking</li>
+                            <li>Scientific Aptitude</li>
+                            <li>Problem-Solving & Pattern Recognition</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- Test Format Widget -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Test Format</div>
+                    <div class="widget-content">
+                        <div class="exam-detail">
+                            <strong>Mode:</strong> Offline, OMR Sheet-based
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Questions:</strong> Multiple Choice (MCQs)
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Total Questions:</strong> 50 per subject
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Total Marks:</strong> 60 per subject
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Duration:</strong> 1 hour per subject
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Marking:</strong> No negative marking
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Structure Widget -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Fee Structure</div>
+                    <div class="widget-content">
+                        <div class="exam-detail">
+                            <strong>Single Subject:</strong> ₹70
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Both Subjects:</strong> ₹140
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Payment Methods:</strong> UPI/Cash
+                        </div>
+                        <div class="exam-detail">
+                            <strong>UPI ID:</strong> krishnendupatra57@okicici
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Widget -->
+                <div class="sidebar-widget fade-in-left">
+                    <div class="widget-header">Contact Information</div>
+                    <div class="widget-content" id="contact">
+                        <div class="exam-detail">
+                            <strong>Organizing Team Coordinators:</strong><br>
+                            Ms. Ashwini Rana<br>
+                            Mr. Krishnendu Patra
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Phone/WhatsApp:</strong><br>
+                            +91 98765 43210<br>
+                            +91 7384687034
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Email:</strong><br>
+                            bairnomath@gmail.com<br>
+                            krishnendupatra57@gmail.com
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Venue:</strong><br>
+                            
+                            <a href="https://www.doonheritageschool.co.in/" title="School">Doon Heritage School , Siliguri</a>
+                        </div>
+                        <div class="exam-detail">
+                            <strong>Location</strong><br>
+                            <a href="https://maps.app.goo.gl/ePKnVJVPxAHRSbZ18?g_st=atm" 
+                               target="_blank" 
+                               style="color: #2c5aa0; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f0f8ff; border-radius: 6px; border: 1px solid #e0e0e0; transition: all 0.3s ease;">
+                                📍 View on Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About Brain-O-Math</h4>
+                    <p>Brain-O-Math Olympiad is organized by Doon Heritage School, Siliguri with the aim of developing interest in Mathematics and Science among young minds through innovation and excellence.</p>
+                    <p>Our mission is to provide a platform for students to showcase their mathematical and scientific abilities.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#details">Exam Details</a>
+                    <a href="#awards">Awards</a>
+                    <a href="#contact">Contact</a>
+                    
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <a href="https://www.doonheritageschool.co.in/" title="School">Doon Heritage School, Siliguri</a>
+                    <p>Phone: +91 98765 43210</p>
+                    <p>Registration: 7384687034</p>
+                    <p>Email: bairnomath@gmail.com</p>
+                    <p>UPI: krishnendupatra57@okicici</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Important Dates</h4>
+                    <p>Registration Deadline: 20th July 2025</p>
+                    <p>Exam Date: 3rd August 2025</p>
+                    <p>Admit Card: 28th July 2025</p>
+                    <p>Result Declaration: 25th August 2025</p>
+                    <p>Working Hours: Monday - Friday, 8:30 AM - 5:30 PM</p>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://www.facebook.com/doonheritagesiliguri" title="Facebook">F</a>
+                <a href="https://www.doonheritageschool.co.in/" title="School">DHS</a>
+             
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Brain-O-Math Olympiad. Organized by Doon Heritage School, Siliguri. All rights reserved.</p>
+                <p>No part of this site including content and/or logo, may be copied and/or used in any manner without prior written consent of Brain-O-Math Olympiad.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000);
+        });
+
+        // Mobile Navigation
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Progress bar animation
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = `${scrollPercent}%`;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.update-card, .sidebar-widget, .testimonial-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add floating effect to CTA buttons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.05)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Enhanced hover effects for cards
+        document.querySelectorAll('.update-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-section');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+
+        // Auto-hide header on scroll down, show on scroll up
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const header = document.querySelector('header');
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                header.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Click outside to close mobile menu
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('nav') && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // Prevent menu close when clicking inside nav
+        navLinks.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.cta-button, .read-more').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.pointerEvents = 'none';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('Brain-O-Math Olympiad 2025 - Website Loaded Successfully!');
+    </script>
+</body>
+</html>

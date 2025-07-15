@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brain-O-Math Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #2d3748;
+}
+
+.main-container {
+  background: #f8fafc;
+  min-height: 100vh;
+  position: relative;
+}
+
+header {
+  background: linear-gradient(135deg, #4c51bf 0%, #667eea 50%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+h1 i {
+  font-size: 1.5rem;
+  color: #ffd700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+.card h2 {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+}
+
+.stat-item i {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.stat-item h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.stat-item p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: #4a5568;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+}
+
+th {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  font-weight: 600;
+  color: #2d3748;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+.status {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+}
+
+.pending {
+  background: linear-gradient(135deg, #fed7aa 0%, #fb923c 100%);
+  color: #9a3412;
+}
+
+.verified {
+  background: linear-gradient(135deg, #bbf7d0 0%, #34d399 100%);
+  color: #065f46;
+}
+
+.rejected {
+  background: linear-gradient(135deg, #fecaca 0%, #f87171 100%);
+  color: #991b1b;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+select {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.statusSel {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+  background: white;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: white;
+  border: 2px solid #e2e8f0;
+  color: #4a5568;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  min-width: 40px;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.pagination button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: #667eea;
+}
+
+.view-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.view-link:hover {
+  background: #f0f4ff;
+  color: #4c51bf;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.loading i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #718096;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #cbd5e0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  main {
+    padding: 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  table {
+    font-size: 0.8rem;
+  }
+  
+  th, td {
+    padding: 0.75rem;
+  }
+}
+
+/* Login Modal Styles */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.login-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-modal h2 {
+  margin-bottom: 1.5rem;
+  color: #2d3748;
+}
+
+.login-modal input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.login-modal input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+</style>
+</head>
+<body>
+<div class="main-container">
+  <header>
+    <h1><i class="fas fa-crown"></i> Brain-O-Math Admin Dashboard</h1>
+    <button id="logoutBtn" class="btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </header>
+
+  <main>
+    <div class="card" id="statsCard">
+      <h2><i class="fas fa-chart-line"></i> Dashboard Overview</h2>
+      <p id="statsLoading" class="loading">
+        <i class="fas fa-spinner"></i> Loading dashboard data...
+      </p>
+      <div id="statsContent" style="display:none">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <i class="fas fa-clipboard-list"></i>
+            <h3 id="totalRegs">0</h3>
+            <p>Total Registrations</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-user-graduate"></i>
+            <h3 id="totalStudents">0</h3>
+            <p>Total Students</p>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-rupee-sign"></i>
+            <h3 id="totalRevenue">0</h3>
+            <p>Total Revenue</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><i class="fas fa-table"></i> Registration Management</h2>
+      
+      <div class="controls">
+        <div class="filter-group">
+          <label for="statusFilter">
+            <i class="fas fa-filter"></i> Filter by Status:
+          </label>
+          <select id="statusFilter">
+            <option value="">All Registrations</option>
+            <option value="pending">Pending</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        
+        <button id="exportBtn" class="btn">
+          <i class="fas fa-download"></i> Export CSV
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table id="regTable">
+          <thead>
+            <tr>
+              <th><i class="fas fa-hashtag"></i> ID</th>
+              <th><i class="fas fa-school"></i> School</th>
+              <th><i class="fas fa-users"></i> Students</th>
+              <th><i class="fas fa-rupee-sign"></i> Amount</th>
+              <th><i class="fas fa-flag"></i> Status</th>
+              <th><i class="fas fa-image"></i> Screenshot</th>
+              <th><i class="fas fa-cog"></i> Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      
+      <div class="pagination" id="pager"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const API = location.origin.includes('localhost') ? 'http://localhost:5000/api' : '/api';
+let token = localStorage.getItem('bomAdminToken') || '';
+const headers = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
+const qs = (sel) => document.querySelector(sel);
+
+async function login() {
+  if (token) return;
+  const username = prompt('Admin Username', 'admin');
+  const password = prompt('Password', 'admin123');
+  const r = await fetch(API + '/admin/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  const j = await r.json();
+  if (!j.success) return alert('Login failed');
+  token = j.token;
+  localStorage.setItem('bomAdminToken', token);
+}
+
+async function loadStats() {
+  const res = await fetch(API + '/admin/stats', { headers: headers() });
+  const j = await res.json();
+  if (!j.success) return alert('Auth error');
+  qs('#statsLoading').style.display = 'none';
+  qs('#statsContent').style.display = 'block';
+  qs('#totalRegs').textContent = j.data.totalRegistrations;
+  qs('#totalStudents').textContent = j.data.totalStudents;
+  qs('#totalRevenue').textContent = j.data.totalRevenue;
+}
+
+let page = 1, status = '';
+
+async function loadRegs() {
+  const res = await fetch(`${API}/admin/registrations?page=${page}&status=${status}`, { headers: headers() });
+  const j = await res.json();
+  const tbody = qs('#regTable tbody');
+  tbody.innerHTML = '';
+  
+  if (j.data.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <p>No registrations found</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  
+  j.data.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${r.registrationId}</strong></td>
+      <td>${r.school.schoolName}</td>
+      <td><span style="font-weight: 600;">${r.students.length}</span></td>
+      <td><strong>₹${r.totalAmount}</strong></td>
+      <td><span class="status ${r.status}">${r.status}</span></td>
+      <td><a href="/uploads/${r.paymentScreenshot.filename}" target="_blank" class="view-link">
+        <i class="fas fa-eye"></i> View
+      </a></td>
+      <td>
+        <select data-id="${r.registrationId}" class="statusSel">
+          <option ${r.status === 'pending' ? 'selected' : ''}>pending</option>
+          <option ${r.status === 'verified' ? 'selected' : ''}>verified</option>
+          <option ${r.status === 'rejected' ? 'selected' : ''}>rejected</option>
+        </select>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  pager(j.pagination.total);
+}
+
+function pager(total) {
+  const p = qs('#pager');
+  p.innerHTML = '';
+  const pages = Math.ceil(total / 20);
+  
+  for (let i = 1; i <= pages; i++) {
+    const b = document.createElement('button');
+    b.textContent = i;
+    b.onclick = () => { page = i; loadRegs() };
+    if (i === page) b.classList.add('active');
+    p.appendChild(b);
+  }
+}
+
+qs('#statusFilter').onchange = e => {
+  status = e.target.value;
+  page = 1;
+  loadRegs();
+};
+
+qs('#exportBtn').onclick = async () => {
+  try {
+    const res = await fetch(API + '/admin/export', {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      return alert(`Export failed: ${err.message}`);
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'registrations.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+  } catch (e) {
+    alert('Export failed');
+  }
+};
+
+qs('#logoutBtn').onclick = () => {
+  localStorage.clear();
+  location.reload();
+};
+
+document.addEventListener('change', async e => {
+  if (e.target.classList.contains('statusSel')) {
+    const id = e.target.dataset.id, val = e.target.value;
+    await fetch(API + `/admin/registrations/${id}/status`, {
+      method: 'PUT',
+      headers: headers(),
+      body: JSON.stringify({ status: val })
+    });
+    loadRegs();
+  }
+});
+
+(async () => {
+  await login();
+  await loadStats();
+  await loadRegs();
+})();
+</script>
+</body>
+</html>
