@@ -1,21 +1,27 @@
-// backend/routes/adminRoutes.js
-
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/adminController');
+const adminController = require('../controllers/adminController');
+const studentController = require('../controllers/studentController');
 const { authenticateAdmin, adminLogin } = require('../middleware/auth');
-const { validateAdminLogin, validateStatusUpdate } = require('../middleware/validation');
 
-// Public login route
-router.post('/login', validateAdminLogin, adminLogin);
+// Admin login
+router.post('/login', adminLogin);
 
-// All routes below require admin authentication ✅
+// Protected admin routes
 router.use(authenticateAdmin);
 
-// Protected admin API endpoints
-router.get('/registrations', ctrl.listRegistrations);
-router.put('/registrations/:id/status', validateStatusUpdate, ctrl.updateRegistrationStatus);
-router.get('/export', ctrl.exportRegistrations);
-router.get('/stats', ctrl.getStatistics);
+// Dashboard stats
+router.get('/stats', adminController.getStats);
+
+// Registration management
+router.get('/registrations', adminController.listRegistrations);
+router.put('/registrations/:id/status', adminController.updateRegistrationStatus);
+router.get('/export', adminController.exportRegistrations);
+
+// Student management
+router.get('/students', studentController.getAllStudents);
+router.put('/students/:id/status', studentController.updateStudentStatus);
+router.get('/export-students', studentController.exportStudents);
+router.get('/student-stats', studentController.getStudentStats);
 
 module.exports = router;

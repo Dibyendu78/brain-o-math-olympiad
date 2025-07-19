@@ -1,16 +1,29 @@
 // backend/controllers/adminController.js
 
 const Registration = require('../models/Registration');
+const Student = require('../models/Student');
 const { Parser } = require('json2csv');
 const fs = require('fs');
 const path = require('path');
 const { sendStatusUpdateEmail } = require('../utils/mailer');
+exports.login = async function (req, res) {
+  // Example dummy login (replace with your logic)
+  const { username, password } = req.body;
+  if (username === "admin" && password === "admin123") {
+    // Issue token, do real authentication in production!
+    res.json({success: true, token: "dummy-token"});
+  } else {
+    res.status(401).json({success: false, message: "Invalid credentials"});
+  }
+};
 
-// ✅ Get paginated registrations (with optional status filter)
+// Get paginated registrations (with optional status filter)
 exports.listRegistrations = async (req, res) => {
   try {
     const { page = 1, limit = 20, status } = req.query;
-    const q = status ? { status } : {};
+    const q = status && status !== '' ? { status: new RegExp(`^${status}$`, 'i') } : {};
+
+
     const skip = (page - 1) * limit;
 
     const data = await Registration.find(q)
@@ -33,19 +46,46 @@ exports.listRegistrations = async (req, res) => {
   }
 };
 
-// ✅ Update registration status and send email
+// Update registration status and send email
 exports.updateRegistrationStatus = async (req, res) => {
   try {
-    const reg = await Registration.findOne({ registrationId: req.params.id })
+    const { status, reason } = req.body;
+    const { id } = req.params;
+
+    const allowed = ['pending', 'verified', 'rejected'];
+    if (!allowed.includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status value' });
+    }
+
+    // Find the registration by registrationId
+    const reg = await Registration.findOne({ registrationId: id })
       .populate('school')
       .populate('students');
-
     if (!reg) {
       return res.status(404).json({ success: false, message: 'Registration not found' });
     }
 
-    // Update the status in DB
-    await reg.updateStatus(req.body.status, req.admin.username, req.body.reason);
+    // History tracking
+    reg.statusHistory.push({
+      status,
+      changedBy: req.admin?.username || "Admin",
+      reason: reason || "",
+      timestamp: new Date()
+    });
+
+    // Set status and adjust paymentStatus as per business logic
+    reg.status = status;
+
+    if (status === 'verified') {
+      reg.paymentStatus = 'completed';
+    } else if (status === 'pending') {
+      reg.paymentStatus = 'pending';
+    } else if (status === 'rejected') {
+      // Do NOT set paymentStatus to 'Rejected' (causes schema error)
+      reg.paymentStatus = 'pending'; // or leave as-is, or add 'rejected' to schema enum if you really want!
+    }
+
+    await reg.save();
 
     const {
       coordinatorEmail,
@@ -54,11 +94,11 @@ exports.updateRegistrationStatus = async (req, res) => {
       schoolName
     } = reg.school;
 
-    // ✉️ Send email on status "verified" or "rejected"
-    if (['verified', 'rejected'].includes(req.body.status)) {
+    // Send email for status change (if desired)
+    if (['verified', 'rejected'].includes(status)) {
       await sendStatusUpdateEmail({
-        registrationId: req.params.id,
-        status: req.body.status,
+        registrationId: id,
+        status,
         coordinatorEmail,
         coordinatorName,
         coordinatorPhone,
@@ -67,14 +107,14 @@ exports.updateRegistrationStatus = async (req, res) => {
       });
     }
 
-    res.json({ success: true, message: 'Status updated and email sent', data: reg });
+    return res.json({ success: true, message: 'Status updated and email sent', data: reg });
   } catch (err) {
-    console.error('❌ Update Status Error:', err.message);
-    res.status(500).json({ success: false, message: 'Could not update status' });
+    console.error('❌ Update Status Error:', err);
+    res.status(500).json({ success: false, message: 'Could not update status', error: err.message });
   }
 };
 
-// ✅ Export all registrations as CSV
+// Export all registrations as CSV
 exports.exportRegistrations = async (_, res) => {
   try {
     const regs = await Registration.find()
@@ -89,7 +129,7 @@ exports.exportRegistrations = async (_, res) => {
         StudentName: s.name,
         Class: s.class,
         Category: s.category,
-        Subjects: Array.isArray(s.subjects) ? s.subjects.join(", ") : s.subjects,
+        Subjects: Array.isArray(s.subjects) ? s.subjects.join(', ') : s.subjects,
         Fee: s.fee,
         Total: reg.totalAmount,
         Status: reg.status
@@ -101,7 +141,7 @@ exports.exportRegistrations = async (_, res) => {
     fs.writeFileSync(filePath, csv);
 
     res.download(filePath, 'registrations.csv', () => {
-      fs.unlinkSync(filePath); // Clean temporary
+      fs.unlinkSync(filePath); // Clean up temp file
     });
   } catch (err) {
     console.error('❌ Export Error:', err.message);
@@ -109,7 +149,36 @@ exports.exportRegistrations = async (_, res) => {
   }
 };
 
-// ✅ Get dashboard statistics
+// DASHBOARD STATISTICS (total registrations, students, revenue)
+exports.getStats = async (req, res) => {
+  try {
+    const totalRegistrations = await Registration.countDocuments();
+    const totalStudents = await Student.countDocuments();
+    // Calculate total revenue from registration documents
+    const registrations = await Registration.find({});
+    const totalRevenue = registrations.reduce((sum, reg) => sum + (reg.totalAmount || 0), 0);
+
+    res.json({
+      success: true,
+      data: {
+        totalRegistrations,
+        totalStudents,
+        totalRevenue
+      }
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching stats'
+    });
+  }
+};
+
+// --- (Optional: Remove getStatistics if unused, as getStats replaces it) ---
+
+/*
+// Get dashboard statistics (using static method in model - only if you still use it elsewhere)
 exports.getStatistics = async (_, res) => {
   try {
     const stats = await Registration.getStatistics(); // Requires static method in model
@@ -119,3 +188,4 @@ exports.getStatistics = async (_, res) => {
     res.status(500).json({ success: false, message: 'Failed to fetch statistics' });
   }
 };
+*/

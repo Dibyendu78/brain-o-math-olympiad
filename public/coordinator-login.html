@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brain-O-Math Coordinator Login</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --danger-gradient: linear-gradient(135deg, #ff416c 0%, #ff4757 100%);
+  --background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --text-muted: #718096;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-radius: 20px;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --glow: 0 0 30px rgba(102, 126, 234, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--background);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated background particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 50%;
+  animation: float 6s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.login-container {
+  max-width: 480px;
+  width: 90%;
+  background: var(--card-bg);
+  backdrop-filter: blur(30px);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 50px 40px;
+  border: 1px solid var(--card-border);
+  animation: fadeInScale 1s ease-out;
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.8), transparent);
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg at 50% 50%, transparent, rgba(102, 126, 234, 0.03), transparent);
+  animation: rotate 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.brain-icon {
+  font-size: 3rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.login-header h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.login-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.subtitle {
+  background: var(--secondary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group label i {
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.input-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.input-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  opacity: 0;
+  transition: var(--transition);
+  pointer-events: none;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 18px 24px;
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), var(--glow);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.form-group input:focus + .input-wrapper::before {
+  opacity: 1;
+}
+
+.login-button {
+  width: 100%;
+  padding: 18px 24px;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 15px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.login-button:hover::before {
+  left: 100%;
+}
+
+.login-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4), var(--glow);
+}
+
+.login-button:active {
+  transform: translateY(-1px);
+}
+
+.login-button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-button:disabled::before {
+  display: none;
+}
+
+.alert {
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+  border: 1px solid;
+  backdrop-filter: blur(10px);
+  animation: slideInDown 0.5s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-error {
+  background: rgba(255, 65, 108, 0.1);
+  color: #ff6b9d;
+  border-color: rgba(255, 65, 108, 0.3);
+}
+
+.alert-success {
+  background: rgba(79, 172, 254, 0.1);
+  color: #4facfe;
+  border-color: rgba(79, 172, 254, 0.3);
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.back-link a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.back-link a:hover {
+  color: #667eea;
+  transform: translateY(-2px);
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 40px 30px;
+    margin: 20px;
+  }
+  
+  .login-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .brain-icon {
+    font-size: 2.5rem;
+  }
+}
+
+/* Focus animations */
+.form-group {
+  position: relative;
+}
+
+.form-group::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.form-group:focus-within::after {
+  width: 100%;
+}
+
+/* Glowing effect for active elements */
+.form-group:focus-within {
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+}
+
+/* Password strength indicator */
+.password-strength {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.password-strength-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--success-gradient);
+  transition: var(--transition);
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<!-- Animated particles background -->
+<div class="particles"></div>
+
+<div class="login-container">
+  <div class="login-header">
+    <div class="brain-icon">
+      <i class="fas fa-brain"></i>
+    </div>
+    <h2>Coordinator Portal</h2>
+    <p>Welcome to <span class="subtitle">Brain-O-Math Olympiad 2025</span></p>
+  </div>
+
+  <div id="alertContainer"></div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="email">
+        <i class="fas fa-envelope"></i> Email Address
+      </label>
+      <div class="input-wrapper">
+        <input type="email" id="email" required placeholder="Enter your registered email" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">
+        <i class="fas fa-shield-alt"></i> Security Code
+      </label>
+      <div class="input-wrapper">
+        <input type="password" id="password" required placeholder="Last 4 digits of your phone" maxlength="4" pattern="[0-9]{4}" autocomplete="current-password">
+      </div>
+      <div class="password-strength">
+        <div class="password-strength-fill"></div>
+      </div>
+    </div>
+
+    <button type="submit" class="login-button" id="loginBtn">
+      <i class="fas fa-rocket"></i> Access Dashboard
+    </button>
+  </form>
+
+  <div class="back-link">
+    <a href="/">
+      <i class="fas fa-arrow-left"></i> Back to Registration
+    </a>
+  </div>
+</div>
+
+<script>
+const API = location.origin.includes('localhost') ? 'http://localhost:5000/api' : '/api';
+
+// Create animated particles
+function createParticles() {
+  const particlesContainer = document.querySelector('.particles');
+  
+  for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 6 + 's';
+    particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+    particlesContainer.appendChild(particle);
+  }
+}
+
+// Password strength indicator
+function updatePasswordStrength(password) {
+  const strengthFill = document.querySelector('.password-strength-fill');
+  const length = password.length;
+  const percentage = (length / 4) * 100;
+  
+  strengthFill.style.width = percentage + '%';
+  
+  if (length === 4) {
+    strengthFill.style.background = 'var(--success-gradient)';
+  } else if (length >= 2) {
+    strengthFill.style.background = 'var(--secondary-gradient)';
+  } else {
+    strengthFill.style.background = 'var(--danger-gradient)';
+  }
+}
+
+// Enhanced form handling
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const loginBtn = document.getElementById('loginBtn');
+  
+  // Validate input
+  if (!email || !password) {
+    showAlert('Please fill in all fields', 'error');
+    return;
+  }
+  
+  if (password.length !== 4 || !/^\d{4}$/.test(password)) {
+    showAlert('Security code must be exactly 4 digits', 'error');
+    return;
+  }
+  
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '<span class="loading"></span>Connecting to server...';
+  
+  try {
+    const response = await fetch(`${API}/coordinator/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok && data.success) {
+      localStorage.setItem('coordinatorToken', data.token);
+      localStorage.setItem('coordinatorData', JSON.stringify(data.coordinator));
+      showAlert('Access granted! Launching dashboard...', 'success');
+      
+      // Add success animation to button
+      loginBtn.innerHTML = '<i class="fas fa-check-circle"></i> Success!';
+      loginBtn.style.background = 'var(--success-gradient)';
+      
+      setTimeout(() => {
+        window.location.href = '/coordinator-dashboard.html';
+      }, 2000);
+    } else {
+      showAlert(data.message || 'Access denied. Please check your credentials.', 'error');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    showAlert('Connection failed. Please check your internet and try again.', 'error');
+  } finally {
+    if (!document.querySelector('.alert-success')) {
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '<i class="fas fa-rocket"></i> Access Dashboard';
+      loginBtn.style.background = 'var(--primary-gradient)';
+    }
+  }
+});
+
+// Enhanced alert system
+function showAlert(message, type) {
+  const alertContainer = document.getElementById('alertContainer');
+  const alertClass = type === 'error' ? 'alert-error' : 'alert-success';
+  const icon = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+  
+  alertContainer.innerHTML = `
+    <div class="alert ${alertClass}">
+      <i class="${icon}"></i>
+      <span>${message}</span>
+    </div>
+  `;
+  
+  setTimeout(() => {
+    const alert = alertContainer.querySelector('.alert');
+    if (alert) {
+      alert.style.animation = 'slideInDown 0.5s ease-out reverse';
+      setTimeout(() => {
+        alertContainer.innerHTML = '';
+      }, 500);
+    }
+  }, 5000);
+}
+
+// Password input enhancements
+document.getElementById('password').addEventListener('input', (e) => {
+  updatePasswordStrength(e.target.value);
+});
+
+// Add subtle hover effects to inputs
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('mouseenter', () => {
+    input.style.transform = 'translateY(-1px)';
+  });
+  
+  input.addEventListener('mouseleave', () => {
+    if (document.activeElement !== input) {
+      input.style.transform = 'translateY(0)';
+    }
+  });
+});
+
+// Initialize particles when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  
+  // Add typing effect to placeholder text
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  
+  // Focus on email input for better UX
+  setTimeout(() => {
+    emailInput.focus();
+  }, 1000);
+});
+
+// Add keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('input').forEach(input => input.blur());
+  }
+});
+</script>
+</body>
+</html>

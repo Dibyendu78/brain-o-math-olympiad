@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brain-O-Math Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #2d3748;
+    }
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 3rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-container h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #2d3748;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #4a5568;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    .form-group input:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+    .login-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      margin-top: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+    }
+    .login-btn i {
+      margin-right: 0.5rem;
+    }
+    .error-msg {
+      color: #dc2626;
+      margin-top: 1rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .success-msg {
+      color: #059669;
+      margin-top: 1rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <h1><i class="fas fa-lock"></i> Admin Login</h1>
+
+    <div class="form-group">
+      <label for="username"><i class="fas fa-user-shield"></i> Username</label>
+      <input type="text" id="username" placeholder="Username" autocomplete="username" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password"><i class="fas fa-key"></i> Password</label>
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
+    </div>
+
+    <button onclick="handleLogin()" class="login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+
+    <div id="loginMessage" class="error-msg"></div>
+  </div>
+
+  <script>
+    // 1. --- REDIRECT TO DASHBOARD IF ALREADY LOGGED IN
+    (function checkAuth() {
+      const token = localStorage.getItem('bomAdminToken');
+      if (token) {
+        window.location.href = '/admin.html'; // Change this if your dashboard's name is different
+      }
+    })();
+
+    // 2. --- LOGIN HANDLER
+    const API = location.origin.includes('localhost') ? 'http://localhost:5000/api' : '/api';
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const messageBox = document.getElementById('loginMessage');
+
+    async function handleLogin() {
+      const username = usernameEl.value.trim();
+      const password = passwordEl.value.trim();
+      messageBox.textContent = '';
+      messageBox.className = 'error-msg';
+
+      if (!username || !password) {
+        messageBox.textContent = 'Please enter both username and password';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          messageBox.textContent = data.message || 'Login failed';
+          return;
+        }
+
+        localStorage.setItem('bomAdminToken', data.token);
+        messageBox.className = 'success-msg';
+        messageBox.textContent = 'Login successful! Redirecting...';
+        // 3. --- REDIRECT TO DASHBOARD IMMEDIATELY (change path if needed)
+        setTimeout(() => window.location.href = '/admin.html', 700);
+      } catch (err) {
+        console.error(err);
+        messageBox.textContent = 'Something went wrong. Try again.';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -54,9 +54,44 @@ h1 i {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.tab-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-nav button {
+  background: transparent;
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-nav button.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.tab-nav button:hover {
+  color: #667eea;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 main {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -376,50 +411,15 @@ select:focus {
   th, td {
     padding: 0.75rem;
   }
-}
-
-/* Login Modal Styles */
-.login-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.login-modal {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-}
-
-.login-modal h2 {
-  margin-bottom: 1.5rem;
-  color: #2d3748;
-}
-
-.login-modal input {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.login-modal input:focus {
-  outline: none;
-  border-color: #667eea;
+  
+  .tab-nav {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .tab-nav button {
+    padding: 0.75rem 1rem;
+  }
 }
 </style>
 </head>
@@ -459,69 +459,164 @@ select:focus {
       </div>
     </div>
 
-    <div class="card">
-      <h2><i class="fas fa-table"></i> Registration Management</h2>
-      
-      <div class="controls">
-        <div class="filter-group">
-          <label for="statusFilter">
-            <i class="fas fa-filter"></i> Filter by Status:
-          </label>
-          <select id="statusFilter">
-            <option value="">All Registrations</option>
-            <option value="pending">Pending</option>
-            <option value="verified">Verified</option>
-            <option value="rejected">Rejected</option>
-          </select>
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="registrations">
+        <i class="fas fa-clipboard-list"></i> Registration Management
+      </button>
+      <button class="tab-btn" data-tab="students">
+        <i class="fas fa-user-graduate"></i> Student Management
+      </button>
+    </div>
+
+    <!-- Registration Management Tab -->
+    <div id="registrations" class="tab-content active">
+      <div class="card">
+        <h2><i class="fas fa-table"></i> Registration Management</h2>
+        
+        <div class="controls">
+          <div class="filter-group">
+            <label for="statusFilter">
+              <i class="fas fa-filter"></i> Filter by Status:
+            </label>
+            <select id="statusFilter">
+              <option value="">All Registrations</option>
+              <option value="pending">Pending</option>
+              <option value="verified">Verified</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          
+          <button id="exportBtn" class="btn">
+            <i class="fas fa-download"></i> Export CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table id="regTable">
+            <thead>
+              <tr>
+                <th><i class="fas fa-hashtag"></i> ID</th>
+                <th><i class="fas fa-school"></i> School</th>
+                <th><i class="fas fa-users"></i> Students</th>
+                <th><i class="fas fa-rupee-sign"></i> Amount</th>
+                <th><i class="fas fa-flag"></i> Status</th>
+                <th><i class="fas fa-image"></i> Screenshot</th>
+                <th><i class="fas fa-cog"></i> Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
         
-        <button id="exportBtn" class="btn">
-          <i class="fas fa-download"></i> Export CSV
-        </button>
+        <div class="pagination" id="pager"></div>
       </div>
+    </div>
 
-      <div class="table-container">
-        <table id="regTable">
-          <thead>
-            <tr>
-              <th><i class="fas fa-hashtag"></i> ID</th>
-              <th><i class="fas fa-school"></i> School</th>
-              <th><i class="fas fa-users"></i> Students</th>
-              <th><i class="fas fa-rupee-sign"></i> Amount</th>
-              <th><i class="fas fa-flag"></i> Status</th>
-              <th><i class="fas fa-image"></i> Screenshot</th>
-              <th><i class="fas fa-cog"></i> Action</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+    <!-- Student Management Tab -->
+    <div id="students" class="tab-content">
+      <div class="card">
+        <h2><i class="fas fa-user-graduate"></i> Student Management</h2>
+        
+        <div class="controls">
+          <div class="filter-group">
+            <label for="studentStatusFilter">
+              <i class="fas fa-filter"></i> Filter by Status:
+            </label>
+            <select id="studentStatusFilter">
+              <option value="">All Students</option>
+              <option value="pending">Pending</option>
+              <option value="verified">Verified</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="classFilter">
+              <i class="fas fa-graduation-cap"></i> Filter by Class:
+            </label>
+            <select id="classFilter">
+              <option value="">All Classes</option>
+              <option value="3">Class 3</option>
+              <option value="4">Class 4</option>
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          
+          <button id="exportStudentsBtn" class="btn">
+            <i class="fas fa-download"></i> Export Students CSV
+          </button>
+        </div>
+
+        <div class="table-container">
+          <table id="studentTable">
+            <thead>
+              <tr>
+                <th><i class="fas fa-hashtag"></i> ID</th>
+                <th><i class="fas fa-user"></i> Name</th>
+                <th><i class="fas fa-graduation-cap"></i> Class</th>
+                <th><i class="fas fa-book"></i> Subjects</th>
+                <th><i class="fas fa-school"></i> School</th>
+                <th><i class="fas fa-user-tie"></i> Coordinator</th>
+                <th><i class="fas fa-envelope"></i> Coordinator Email</th>
+                <th><i class="fas fa-users"></i> Parent</th>
+                <th><i class="fas fa-phone"></i> Parent Contact</th>
+                <th><i class="fas fa-flag"></i> Status</th>
+                
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        
+        <div class="pagination" id="studentPager"></div>
       </div>
-      
-      <div class="pagination" id="pager"></div>
     </div>
   </main>
 </div>
 
 <script>
 const API = location.origin.includes('localhost') ? 'http://localhost:5000/api' : '/api';
-let token = localStorage.getItem('bomAdminToken') || '';
+let token = localStorage.getItem('bomAdminToken');
+if (!token) {
+  // If not logged in, redirect to login page
+  window.location.href = '/admin-login.html';
+}
+
+
 const headers = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
 const qs = (sel) => document.querySelector(sel);
 
-async function login() {
-  if (token) return;
-  const username = prompt('Admin Username', 'admin');
-  const password = prompt('Password', 'admin123');
-  const r = await fetch(API + '/admin/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
+// Tab functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tabName = btn.dataset.tab;
+    
+    // Remove active class from all buttons and contents
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    // Add active class to clicked button and corresponding content
+    btn.classList.add('active');
+    document.getElementById(tabName).classList.add('active');
+    
+    // Load data for the active tab
+    if (tabName === 'registrations') {
+      loadRegs();
+    } else if (tabName === 'students') {
+      loadStudents();
+    }
   });
-  const j = await r.json();
-  if (!j.success) return alert('Login failed');
-  token = j.token;
-  localStorage.setItem('bomAdminToken', token);
-}
+});
+
+
 
 async function loadStats() {
   const res = await fetch(API + '/admin/stats', { headers: headers() });
@@ -537,12 +632,15 @@ async function loadStats() {
 let page = 1, status = '';
 
 async function loadRegs() {
-  const res = await fetch(`${API}/admin/registrations?page=${page}&status=${status}`, { headers: headers() });
+  let url = `${API}/admin/registrations?page=${page}`;
+  if (status) url += `&status=${status}`;
+  const res = await fetch(url, { headers: headers() });
+
   const j = await res.json();
   const tbody = qs('#regTable tbody');
   tbody.innerHTML = '';
-  
-  if (j.data.length === 0) {
+
+  if (!j.data || j.data.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td colspan="7" class="empty-state">
@@ -553,7 +651,7 @@ async function loadRegs() {
     `;
     return;
   }
-  
+
   j.data.forEach(r => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -581,7 +679,7 @@ function pager(total) {
   const p = qs('#pager');
   p.innerHTML = '';
   const pages = Math.ceil(total / 20);
-  
+
   for (let i = 1; i <= pages; i++) {
     const b = document.createElement('button');
     b.textContent = i;
@@ -590,11 +688,132 @@ function pager(total) {
     p.appendChild(b);
   }
 }
+// Student Management Functions
 
+
+let studentPage = 1, studentStatus = '', studentClass = '';
+
+async function loadStudents() {
+  const tbody = qs('#studentTable tbody');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="11" class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Loading...
+      </td>
+    </tr>
+  `;
+
+  try {
+    // --- Build URL with filters only when set ---
+    let url = `${API}/admin/students?page=${studentPage}`;
+    if (studentStatus) url += `&status=${studentStatus}`;
+    if (studentClass) url += `&class=${studentClass}`;
+
+    const res = await fetch(url, { headers: headers() });
+
+    // Network error? Try/catch will catch!
+    if (!res.ok) {
+      throw new Error('Failed to load student data (HTTP ' + res.status + ')');
+    }
+
+    const j = await res.json();
+
+    if (!j.success) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="11" class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>${j.message || 'Error loading students'}</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    // Defensive: check data property is indeed an array
+    if (!Array.isArray(j.data) || j.data.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+            <td colspan="11" class="empty-state">
+              <i class="fas fa-user-slash"></i>
+              <p>No students found</p>
+            </td>
+        </tr>
+      `;
+      return;
+    }
+
+    // Show student rows
+    tbody.innerHTML = '';
+    j.data.forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${s.studentId}</strong></td>
+        <td>${s.name}</td>
+        <td>${s.class}</td>
+        <td>${formatSubjects(s.subjects)}</td>
+        <td>${s.schoolName}</td>
+        <td>${s.coordinatorName}</td>
+        <td>${s.coordinatorEmail}</td>
+        <td>${s.parentName || 'N/A'}</td>
+        <td>${s.parentContact || 'N/A'}</td>
+        <td><span class="status ${s.status}">${s.status}</span></td>`;
+      tbody.appendChild(tr);
+    });
+
+    studentPager(j.pagination.total);
+
+  } catch (err) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="11" class="empty-state">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Error: ${err.message}</p>
+        </td>
+      </tr>
+    `;
+  }
+}
+
+function studentPager(total) {
+  const p = qs('#studentPager');
+  p.innerHTML = '';
+  const pages = Math.ceil(total / 20);
+
+  for (let i = 1; i <= pages; i++) {
+    const b = document.createElement('button');
+    b.textContent = i;
+    b.onclick = () => { studentPage = i; loadStudents() };
+    if (i === studentPage) b.classList.add('active');
+    p.appendChild(b);
+  }
+}
+
+
+function formatSubjects(subjects) {
+  if (subjects === 'both') return 'Math & Science';
+  if (subjects === 'math') return 'Mathematics';
+  if (subjects === 'science') return 'Science';
+  return subjects;
+}
+
+// Event listeners
 qs('#statusFilter').onchange = e => {
   status = e.target.value;
   page = 1;
   loadRegs();
+};
+
+qs('#studentStatusFilter').onchange = e => {
+  studentStatus = e.target.value;
+  studentPage = 1;
+  loadStudents();
+};
+
+qs('#classFilter').onchange = e => {
+  studentClass = e.target.value;
+  studentPage = 1;
+  loadStudents();
 };
 
 qs('#exportBtn').onclick = async () => {
@@ -625,28 +844,66 @@ qs('#exportBtn').onclick = async () => {
   }
 };
 
-qs('#logoutBtn').onclick = () => {
-  localStorage.clear();
-  location.reload();
+qs('#exportStudentsBtn').onclick = async () => {
+  try {
+    const res = await fetch(API + '/admin/export-students', {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      return alert(`Export failed: ${err.message}`);
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'students.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+  } catch (e) {
+    alert('Export failed');
+  }
 };
+
+qs('#logoutBtn').onclick = () => {
+  localStorage.removeItem('bomAdminToken');
+  window.location.href = '/admin-login.html';
+};
+
 
 document.addEventListener('change', async e => {
   if (e.target.classList.contains('statusSel')) {
-    const id = e.target.dataset.id, val = e.target.value;
-    await fetch(API + `/admin/registrations/${id}/status`, {
-      method: 'PUT',
-      headers: headers(),
-      body: JSON.stringify({ status: val })
-    });
-    loadRegs();
+    const id = e.target.dataset.id;
+    const val = e.target.value;
+    
+    if (e.target.classList.contains('student-status')) {
+      // Update student status
+      await fetch(API + `/admin/students/${id}/status`, {
+        method: 'PUT',
+        headers: headers(),
+        body: JSON.stringify({ status: val })
+      });
+      loadStudents();
+    } else {
+      // Update registration status
+      await fetch(API + `/admin/registrations/${id}/status`, {
+        method: 'PUT',
+        headers: headers(),
+        body: JSON.stringify({ status: val })
+      });
+      loadRegs();
+    }
   }
 });
-
-(async () => {
-  await login();
-  await loadStats();
-  await loadRegs();
-})();
+loadStats();
+loadRegs();
 </script>
 </body>
 </html>

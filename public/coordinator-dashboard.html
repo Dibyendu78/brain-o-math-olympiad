@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Coordinator Dashboard - Brain-O-Math Olympiad</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Modern 2025 Color Palette */
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+  --secondary-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  
+  /* Enhanced Background with Subtle Pattern */
+  --background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  
+  /* Modern Shadow System */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  /* Enhanced Typography */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  
+  /* Modern Colors */
+  --border-color: rgba(226, 232, 240, 0.8);
+  --border-radius: 20px;
+  --border-radius-lg: 24px;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--background);
+  min-height: 100vh;
+  color: var(--text-primary);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background particles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  z-index: -1;
+  animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  border-radius: 10px;
+  transition: var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4f46e5, #7c3aed);
+}
+
+.header {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: var(--transition);
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-gradient);
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header h1 i {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.coordinator-info {
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.coordinator-info div:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.coordinator-info div:last-child {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--glass-shadow);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card h2 i {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: rotate 20s linear infinite;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: calc(var(--border-radius) - 2px);
+  z-index: 1;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stat-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.total::before {
+  background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+}
+
+.stat-card.pending::before {
+  background: conic-gradient(from 0deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+}
+
+.stat-card.completed::before {
+  background: conic-gradient(from 0deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), var(--shadow-md);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+input:disabled, select:disabled {
+  background: rgba(248, 250, 252, 0.8);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.student-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: var(--transition);
+  overflow: hidden;
+}
+.student-card .button-group {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 12px; /* spacing between buttons */
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+}
+
+.student-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.student-card h4 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.student-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.student-card p span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.student-card .edit-btn,
+.student-card .remove-btn {
+  position: relative;   /* no longer absolute */
+  top: auto;
+  right: auto;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+
+.edit-btn {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.remove-btn {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.edit-btn:hover, .remove-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.edit-btn:hover {
+  background: rgba(5, 150, 105, 0.95);
+}
+
+.remove-btn:hover {
+  background: rgba(220, 38, 38, 0.95);
+}
+
+.cta-button, .btn-secondary {
+  padding: 16px 32px;
+  border-radius: 16px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 8px 8px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.cta-button:hover::before {
+  left: 100%;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4), 0 8px 16px rgba(99, 102, 241, 0.3);
+}
+
+.cta-button:disabled {
+  background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
+  border: 2px solid rgba(226, 232, 240, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: #6366f1;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.payment-section {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-top: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.payment-section h3 {
+  color: #2563eb;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.fee-summary {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.05) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin: 2rem 0;
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+}
+
+.fee-summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.8), transparent);
+}
+
+.fee-summary h3 {
+  color: #059669;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+  font-weight: 500;
+}
+
+.fee-item:last-child {
+  border-bottom: none;
+}
+
+.fee-item span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fee-item span:last-child {
+  font-weight: 700;
+  color: #059669;
+}
+
+.total-fee {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #059669;
+  text-align: right;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.payment-instructions {
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  backdrop-filter: blur(10px);
+}
+
+.payment-instructions h4 {
+  color: #2563eb;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.payment-instructions ol {
+  color: var(--text-secondary);
+  padding-left: 1.5rem;
+}
+
+.payment-instructions li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.upi-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--success-gradient);
+  color: white;
+  padding: 18px 36px;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+  margin: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.upi-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.upi-button:hover::before {
+  left: 100%;
+}
+
+.upi-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4), 0 8px 16px rgba(16, 185, 129, 0.3);
+  text-decoration: none;
+  color: white;
+}
+
+.file-upload {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.file-upload input[type=file] {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 2rem;
+  border: 2px dashed rgba(226, 232, 240, 0.8);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  min-height: 120px;
+  font-weight: 500;
+}
+
+.file-upload-label:hover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.file-upload-label.has-file {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+  color: #059669;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+.status-pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-completed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-verified {
+  background: rgba(34, 197, 94, 0.2);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.loading {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+}
+
+.empty-state i {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.4;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 2rem 1.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .student-card .edit-btn, .student-card .remove-btn {
+    position: static;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-button, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+  }
+  
+  .upi-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .stat-card::before {
+    animation: none;
+  }
+  
+  body::before {
+    animation: none;
+  }
+}
+
+/* Focus styles for better accessibility */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><i class="fas fa-brain"></i> Coordinator Dashboard</h1>
+  <div class="header-right">
+    <div class="coordinator-info">
+      <div id="coordinatorName">Loading...</div>
+      <div id="schoolName">Loading...</div>
+    </div>
+    <button class="logout-btn" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+
+<div class="main-content">
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card total">
+      <div class="stat-number" id="totalStudents">0</div>
+      <div class="stat-label">Total Students</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="stat-number" id="pendingAmount">₹0</div>
+      <div class="stat-label">Total Amount</div>
+    </div>
+    <div class="stat-card completed">
+      <div class="stat-number" id="registrationStatus">Pending</div>
+      <div class="stat-label">Registration Status</div>
+    </div>
+  </div>
+
+  <!-- Student Management -->
+  <div class="card">
+    <h2><i class="fas fa-user-graduate"></i> Student Management</h2>
+    
+    <!-- Add/Edit Student Form -->
+    <div id="studentForm" class="hidden">
+      <h3>Add New Student</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="studentName"><i class="fas fa-user"></i> Student Name *</label>
+          <input id="studentName" placeholder="Enter student name" required>
+        </div>
+        <div class="form-group">
+          <label for="studentClass"><i class="fas fa-graduation-cap"></i> Class *</label>
+          <select id="studentClass" required>
+            <option value="">Select Class</option>
+            <option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option>
+            <option>9</option><option>10</option><option>11</option><option>12</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="studentCategory"><i class="fas fa-tag"></i> Category</label>
+          <input id="studentCategory" readonly placeholder="Auto-filled based on class">
+        </div>
+        <div class="form-group">
+          <label for="subjects"><i class="fas fa-book"></i> Subjects *</label>
+          <select id="subjects" required>
+            <option value="">Select Subject</option>
+            <option value="math">Mathematics (₹70)</option>
+            <option value="science">Science (₹70)</option>
+            <option value="both">Both (₹140)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="parentName"><i class="fas fa-users"></i> Parent's Name</label>
+          <input id="parentName" placeholder="Enter parent's name">
+        </div>
+        <div class="form-group">
+          <label for="parentContact"><i class="fas fa-mobile-alt"></i> Parent's Contact</label>
+          <input id="parentContact" pattern="[0-9]{10}" placeholder="Enter 10-digit contact number">
+        </div>
+      </div>
+      
+      <button type="button" class="cta-button" onclick="saveStudent()">
+        <i class="fas fa-save"></i> Save Student
+      </button>
+      <button type="button" class="btn-secondary" onclick="cancelEdit()">
+        <i class="fas fa-times"></i> Cancel
+      </button>
+    </div>
+
+    <!-- Students List -->
+    <div id="studentsContainer">
+      <div class="empty-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading students...</p>
+      </div>
+    </div>
+
+    <button id="addStudentBtn" class="cta-button" onclick="showAddForm()">
+      <i class="fas fa-plus"></i> Add Student
+    </button>
+  </div>
+
+  <!-- Payment Section -->
+  <div class="payment-section" id="paymentSection">
+    <h3><i class="fas fa-credit-card"></i> Payment Information</h3>
+    
+    <div class="fee-summary" id="feeSummary">
+      <h3><i class="fas fa-calculator"></i> Fee Summary</h3>
+      <div id="feeBreakdown"></div>
+      <div class="total-fee">Total Amount: ₹<span id="totalAmount">0</span></div>
+    </div>
+
+    <!-- UPI Payment Form -->
+    <div id="paymentForm" class="registration-form">
+      <div class="payment-instructions">
+        <h4><i class="fas fa-mobile-alt"></i> Payment Instructions</h4>
+        <ol>
+          <li>Click the "Pay via UPI" button below to open your UPI app</li>
+          <li>Complete the payment using any UPI app (GPay, PhonePe, Paytm, etc.)</li>
+          <li>Take a screenshot of the successful payment confirmation</li>
+          <li>Upload the screenshot below and submit your registration</li>
+        </ol>
+      </div>
+      
+      <a id="upiPaymentLink" class="upi-button" target="_blank">
+        <i class="fas fa-mobile-alt"></i> Pay ₹<span id="upiAmount">0</span> via UPI
+      </a>
+      
+      <div style="text-align: center; margin: 20px 0;">
+        <h4 style="color: #2563eb; margin-bottom: 16px;">OR</h4>
+        <h4 style="color: #2563eb; margin-bottom: 16px;">Scan This QR To Payment</h4>
+        <img src="scanner.jpg" alt="Scan UPI" style="max-width: 300px; width: 100%; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+      </div>
+      
+      <div class="form-group">
+        <label for="paymentScreenshot"><i class="fas fa-camera"></i> Upload Payment Screenshot *</label>
+        <div class="file-upload">
+          <input type="file" id="paymentScreenshot" accept="image/*" required>
+          <label for="paymentScreenshot" class="file-upload-label" id="fileUploadLabel">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Click to upload screenshot or drag & drop</span>
+          </label>
+        </div>
+      </div>
+      
+      <button id="submitRegistration" class="cta-button" disabled>
+        <i class="fas fa-check"></i> Submit Registration
+      </button>
+    </div>
+
+    <div id="paymentCompleted" class="hidden">
+      <p><i class="fas fa-check-circle"></i> Payment screenshot uploaded successfully!</p>
+      <p>Your registration is now complete and waiting for admin verification.</p>
+      <div style="margin-top: 16px; padding: 16px; background: rgba(59, 130, 246, 0.1); border-radius: 12px;">
+        <strong>Registration ID: <span id="registrationId" style="color: #2563eb;"></span></strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = location.origin.includes('localhost') ? 'http://localhost:5000/api' : '/api';
+const UPI_ID = 'krishnendupatra57@paytm'; // Replace with your UPI ID
+const PAYEE_NAME = 'Brain-O-Math Olympiad 2025';
+
+let coordinatorToken = localStorage.getItem('coordinatorToken');
+let registrationData = null;
+let currentEditingStudent = null;
+
+// Check authentication
+if (!coordinatorToken) {
+  window.location.href = '/coordinator-login.html';
+}
+
+const headers = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${coordinatorToken}`
+});
+
+// Category mapping function
+function getCategory(cls) {
+  let c = parseInt(cls, 10);
+  if (c >= 3 && c <= 4) return 'A';
+  if (c >= 5 && c <= 6) return 'B';
+  if (c >= 7 && c <= 8) return 'C';
+  if (c >= 9 && c <= 10) return 'D';
+  if (c >= 11) return 'E';
+  return '-';
+}
+
+// Subject formatting function
+function formatSubjects(subjects) {
+  if (subjects === 'both') return 'Math & Science';
+  if (subjects === 'math') return 'Mathematics';
+  if (subjects === 'science') return 'Science';
+  return subjects;
+}
+
+// Subject text for fee calculation
+function subjText(subj) {
+  if (subj === 'both') return 'Math & Science';
+  if (subj === 'math') return 'Mathematics';
+  if (subj === 'science') return 'Science';
+  return subj;
+}
+
+// Calculate fees function
+function calculateFees() {
+  if (!registrationData || !registrationData.students) return;
+  
+  registrationData.totalAmount = registrationData.students.reduce((t,s)=>t+s.fee,0);
+  document.getElementById('totalAmount').innerText = registrationData.totalAmount;
+  document.getElementById('upiAmount').innerText = registrationData.totalAmount;
+  document.getElementById('feeBreakdown').innerHTML = registrationData.students.map(s=>
+    `<div class="fee-item">
+      <span><i class="fas fa-user"></i> ${s.name} (${subjText(s.subjects)})</span>
+      <span><i class="fas fa-rupee-sign"></i> ₹${s.fee}</span>
+    </div>`).join('');
+  
+  setupUPIPayment();
+}
+
+// UPI payment setup
+function setupUPIPayment() {
+  if (!registrationData || !registrationData.totalAmount) return;
+  
+  const amount = registrationData.totalAmount;
+  const coordinatorData = JSON.parse(localStorage.getItem('coordinatorData') || '{}');
+  const transactionNote = `Brain-O-Math Olympiad 2025 Registration - ${coordinatorData.schoolName || 'School'}`;
+
+  const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
+
+  const intentLink = `intent://${upiLink.replace('upi://', '')}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`;
+
+  // Try opening in UPI app via intent link
+  const anchor = document.getElementById('upiPaymentLink');
+  if (anchor) {
+    anchor.href = intentLink;
+
+    // Fallback: open regular UPI URI on click (mobile only)
+    anchor.onclick = function(e) {
+      if (/Android/i.test(navigator.userAgent)) {
+        window.location.href = intentLink;
+      } else {
+        alert('UPI apps can only be triggered from mobile devices.');
+      }
+    };
+  }
+}
+
+// Load dashboard data
+async function loadDashboard() {
+  try {
+    const coordinatorData = JSON.parse(localStorage.getItem('coordinatorData'));
+    document.getElementById('coordinatorName').textContent = coordinatorData.coordinatorName;
+    document.getElementById('schoolName').textContent = coordinatorData.schoolName;
+    
+    const response = await fetch(`${API}/coordinator/registration`, {
+      headers: headers()
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      registrationData = data.data;
+      updateStats();
+      renderStudents();
+      updatePaymentSection();
+      calculateFees();
+    } else {
+      const error = await response.json();
+      if (response.status === 401) {
+        logout();
+      } else {
+        console.error('Failed to load dashboard:', error.message);
+      }
+    }
+  } catch (error) {
+    console.error('Dashboard load error:', error);
+  }
+}
+
+// Update statistics
+function updateStats() {
+  const totalStudents = registrationData?.students?.length || 0;
+  const totalAmount = registrationData?.totalAmount || 0;
+  const status = registrationData?.status || 'pending';
+
+  document.getElementById('totalStudents').textContent = totalStudents;
+  document.getElementById('pendingAmount').textContent = `₹${totalAmount}`;
+  document.getElementById('registrationStatus').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+
+  const statusCard = document.querySelector('.stat-card.completed');
+  if (statusCard) {
+    statusCard.className = `stat-card ${status}`;
+  }
+}
+
+// Render students list
+function renderStudents() {
+  const container = document.getElementById('studentsContainer');
+  
+  if (!registrationData?.students?.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-user-slash"></i>
+        <p>No students added yet. Click "Add Student" to get started.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const canEdit = !registrationData.paymentStatus || registrationData.paymentStatus === 'pending';
+  
+  container.innerHTML = registrationData.students.map((student, index) => `
+    <div class="student-card">
+      ${canEdit ? `
+        <div class="button-group">
+          <button class="edit-btn" onclick="editStudent(${index})">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+        <button class="remove-btn" onclick="removeStudent(${index})">
+            <i class="fas fa-trash"></i> Remove
+        </button>
+        </div>
+    ` : ''}
+
+
+      <h4><i class="fas fa-user"></i> ${student.name}</h4>
+      <p>
+        <span><i class="fas fa-graduation-cap"></i> Class ${student.class}</span>
+        <span><i class="fas fa-tag"></i> Category ${student.category}</span>
+        <span><i class="fas fa-book"></i> ${formatSubjects(student.subjects)}</span>
+        <span><i class="fas fa-rupee-sign"></i> ₹${student.fee}</span>
+      </p>
+      ${student.parentContact ? `<p><i class="fas fa-phone"></i> Parent: ${student.parentContact}</p>` : ''}
+    </div>
+  `).join('');
+}
+
+// Update payment section
+function updatePaymentSection() {
+  const feeBreakdown = document.getElementById('feeBreakdown');
+  const totalAmount = document.getElementById('totalAmount');
+  const paymentForm = document.getElementById('paymentForm');
+  const paymentCompleted = document.getElementById('paymentCompleted');
+  
+  if (!registrationData?.students?.length) {
+    feeBreakdown.innerHTML = '<p>No students added yet.</p>';
+    totalAmount.textContent = '0';
+    if (paymentForm) paymentForm.style.display = 'none';
+    if (paymentCompleted) paymentCompleted.classList.add('hidden');
+    return;
+  }
+
+  // Show fee breakdown
+  feeBreakdown.innerHTML = registrationData.students.map(student => `
+    <div class="fee-item">
+      <span><i class="fas fa-user"></i> ${student.name} (${formatSubjects(student.subjects)})</span>
+      <span><i class="fas fa-rupee-sign"></i> ₹${student.fee}</span>
+    </div>
+  `).join('');
+  
+  totalAmount.textContent = registrationData.totalAmount || '0';
+
+  // Show payment form or completed status
+  if (registrationData.paymentStatus === 'completed') {
+    if (paymentForm) paymentForm.style.display = 'none';
+    if (paymentCompleted) paymentCompleted.classList.remove('hidden');
+    if (registrationData.registrationId) {
+      document.getElementById('registrationId').textContent = registrationData.registrationId;
+    }
+  } else {
+    if (paymentForm) paymentForm.style.display = 'block';
+    if (paymentCompleted) paymentCompleted.classList.add('hidden');
+  }
+}
+
+// Show add student form
+function showAddForm() {
+  const form = document.getElementById('studentForm');
+  const canEdit = !registrationData?.paymentStatus || registrationData.paymentStatus === 'pending';
+  
+  if (!canEdit) {
+    alert('Cannot add students after payment is completed.');
+    return;
+  }
+  
+  form.classList.remove('hidden');
+  document.getElementById('addStudentBtn').classList.add('hidden');
+  clearForm();
+}
+
+// Clear form
+function clearForm() {
+  document.getElementById('studentName').value = '';
+  document.getElementById('studentClass').value = '';
+  document.getElementById('studentCategory').value = '';
+  document.getElementById('subjects').value = '';
+  document.getElementById('parentName').value = '';
+  document.getElementById('parentContact').value = '';
+  currentEditingStudent = null;
+}
+
+// Cancel edit
+function cancelEdit() {
+  document.getElementById('studentForm').classList.add('hidden');
+  document.getElementById('addStudentBtn').classList.remove('hidden');
+  clearForm();
+}
+
+// Edit student
+function editStudent(index) {
+  const student = registrationData.students[index];
+  const form = document.getElementById('studentForm');
+  
+  form.classList.remove('hidden');
+  document.getElementById('addStudentBtn').classList.add('hidden');
+  
+  document.getElementById('studentName').value = student.name;
+  document.getElementById('studentClass').value = student.class;
+  document.getElementById('studentCategory').value = student.category;
+  document.getElementById('subjects').value = student.subjects;
+  document.getElementById('parentName').value = student.parentName || '';
+  document.getElementById('parentContact').value = student.parentContact || '';
+  
+  currentEditingStudent = index;
+}
+
+// Remove student
+async function removeStudent(index) {
+  if (!confirm('Are you sure you want to remove this student?')) return;
+
+  try {
+    const response = await fetch(`${API}/coordinator/students/${index}`, {
+      method: 'DELETE',
+      headers: headers()
+    });
+
+    if (response.ok) {
+      registrationData.students.splice(index, 1);
+      registrationData.totalAmount = registrationData.students.reduce((sum, s) => sum + (s.fee || 0), 0);
+
+      renderStudents();
+      updateStats();
+      updatePaymentSection();
+      calculateFees();
+      return;
+    }
+
+    alert('Student not removed. Status: ' + response.status);
+
+  } catch (err) {
+    alert('Failed to remove student. Please check your internet connection.');
+    console.error('Remove student error:', err);
+  }
+}
+
+// Save student
+async function saveStudent() {
+  const name = document.getElementById('studentName').value.trim();
+  const cls = document.getElementById('studentClass').value;
+  const subjects = document.getElementById('subjects').value;
+  const parentName = document.getElementById('parentName').value.trim();
+  const parentContact = document.getElementById('parentContact').value.trim();
+  
+  if (!name || !cls || !subjects) {
+    alert('Please fill all required fields');
+    return;
+  }
+  
+  const fee = subjects === 'both' ? 140 : 70;
+  const studentData = {
+    name,
+    class: cls,
+    category: getCategory(cls),
+    subjects,
+    fee,
+    parentName,
+    parentContact,
+  };
+  
+  try {
+    const url = currentEditingStudent !== null 
+      ? `${API}/coordinator/students/${currentEditingStudent}`
+      : `${API}/coordinator/students`;
+    
+    const method = currentEditingStudent !== null ? 'PUT' : 'POST';
+    
+    const response = await fetch(url, {
+      method,
+      headers: headers(),
+      body: JSON.stringify(studentData)
+    });
+    
+    if (response.ok) {
+      cancelEdit();
+      await loadDashboard();
+    } else {
+      const error = await response.json();
+      alert(error.message || 'Failed to save student');
+    }
+  } catch (error) {
+    console.error('Save student error:', error);
+    alert('Failed to save student');
+  }
+}
+
+// File upload handling
+document.getElementById('paymentScreenshot').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  const label = document.getElementById('fileUploadLabel');
+  
+  if (file) {
+    registrationData.paymentScreenshot = file;
+    label.classList.add('has-file');
+    label.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      <span>${file.name} (${(file.size/1024/1024).toFixed(2)} MB)</span>
+    `;
+    document.getElementById('submitRegistration').disabled = false;
+  } else {
+    registrationData.paymentScreenshot = null;
+    label.classList.remove('has-file');
+    label.innerHTML = `
+      <i class="fas fa-cloud-upload-alt"></i>
+      <span>Click to upload screenshot or drag & drop</span>
+    `;
+    document.getElementById('submitRegistration').disabled = true;
+  }
+});
+
+// Registration submission
+document.getElementById('submitRegistration').addEventListener('click', async function() {
+  if (!registrationData.paymentScreenshot) {
+    alert('Please upload payment screenshot first');
+    return;
+  }
+
+  const btn = this;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  btn.disabled = true;
+
+  // Prepare form data for file upload
+  const coordinatorData = JSON.parse(localStorage.getItem('coordinatorData') || '{}');
+  const formData = new FormData();
+  
+  formData.append('school', JSON.stringify({
+    schoolName: coordinatorData.schoolName,
+    schoolAddress: coordinatorData.schoolAddress || '',
+    coordinatorName: coordinatorData.coordinatorName,
+    coordinatorEmail: coordinatorData.coordinatorEmail,
+    coordinatorPhone: coordinatorData.coordinatorPhone
+  }));
+  
+  formData.append('students', JSON.stringify(registrationData.students));
+  formData.append('totalAmount', registrationData.totalAmount);
+  formData.append('paymentScreenshot', registrationData.paymentScreenshot);
+
+  try {
+    const res = await fetch(`${API}/registrations`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${coordinatorToken}`
+      },
+      body: formData
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      document.getElementById('registrationId').innerText = data.data.registrationId;
+      document.getElementById('paymentForm').style.display = 'none';
+      document.getElementById('paymentCompleted').classList.remove('hidden');
+      alert(`Registration submitted successfully! Your registration ID is: ${data.data.registrationId}`);
+    } else {
+      alert(data.message || 'Registration failed');
+    }
+  } catch (err) {
+    alert('Failed to submit registration. Please try again.');
+    console.error('Registration submission error:', err);
+  }
+
+  btn.innerHTML = '<i class="fas fa-check"></i> Submit Registration';
+  btn.disabled = false;
+});
+
+// Auto-fill category when class changes
+document.getElementById('studentClass').addEventListener('change', function() {
+  document.getElementById('studentCategory').value = getCategory(this.value);
+});
+
+// Logout function
+function logout() {
+  localStorage.removeItem('coordinatorToken');
+  localStorage.removeItem('coordinatorData');
+  window.location.href = '/coordinator-login.html';
+}
+
+// Initialize dashboard
+loadDashboard();
+</script>
+</body>
+</html>
